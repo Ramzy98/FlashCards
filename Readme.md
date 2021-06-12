@@ -6,7 +6,7 @@ Mobile application that allows users to study collections of flashcards. The app
 
 ## Instructions:
 
-## `npm install`
+### npm install
 
 ### download expo app on your mobile device
 
