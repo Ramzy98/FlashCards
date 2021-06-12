@@ -8,7 +8,12 @@ import {
   Alert,
 } from "react-native";
 import { white, mint, green, red } from "../utils/colors";
-import { generateID, getDeck } from "../utils/helpers";
+import {
+  generateID,
+  getDeck,
+  clearLocalNotification,
+  setLocalNotification,
+} from "../utils/helpers";
 import FlipCard from "react-native-flip-card";
 import TextButton from "./TextButton";
 var counter = 0;
@@ -33,6 +38,7 @@ export default class StartQuiz extends Component {
         "% of the questions right";
       correct = 0;
       incorrect = 0;
+      clearLocalNotification().then(setLocalNotification);
       return Alert.alert(message);
     }
   };

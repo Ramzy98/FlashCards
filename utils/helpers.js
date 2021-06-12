@@ -1,6 +1,8 @@
 import { AsyncStorage } from "react-native";
-export const FLASHCARDS_STORAGE_KEY = "FlashCards:data";
-
+import * as Permissions from "expo-permissions";
+import { Notifications } from "expo";
+const FLASHCARDS_STORAGE_KEY = "FlashCards:data";
+const NOTIFICATION_KEY = "FlashCards:notifications";
 var decks;
 export function generateID() {
   return Date.now();
@@ -42,8 +44,51 @@ export function addCardToDeck(id, question, answer) {
   };
   AsyncStorage.setItem(FLASHCARDS_STORAGE_KEY, JSON.stringify(decks));
 }
-/*
-getDecks: return all of the decks along with their titles, questions, and answers.
-getDeck: take in a single id argument and return the deck associated with that id.
-saveDeckTitle: take in a single title argument and add it to the decks.
-addCardToDeck: take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.*/
+
+export function clearLocalNotification() {
+  return AsyncStorage.removeItem("notification").then(
+    Notifications.cancelAllScheduledNotificationsAsync
+  );
+}
+
+function createNotification() {
+  return {
+    title: "Take a quiz!",
+    body: "👋 don't forget to study today!",
+    ios: {
+      sound: true,
+    },
+    android: {
+      sound: true,
+      priority: "high",
+      sticky: false,
+      vibrate: true,
+    },
+  };
+}
+
+export function setLocalNotification() {
+  AsyncStorage.getItem(NOTIFICATION_KEY)
+    .then(JSON.parse)
+    .then((data) => {
+      if (data === null) {
+        Permissions.askAsync(Permissions.NOTIFICATIONS).then(({ status }) => {
+          if (status === "granted") {
+            Notifications.cancelAllScheduledNotificationsAsync();
+
+            let tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate());
+            tomorrow.setHours(18);
+            tomorrow.setMinutes(50);
+
+            Notifications.scheduleLocalNotificationAsync(createNotification(), {
+              time: tomorrow,
+              repeat: "day",
+            });
+
+            AsyncStorage.setItem("notification", JSON.stringify(true));
+          }
+        });
+      }
+    });
+}
