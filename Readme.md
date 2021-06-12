@@ -6,11 +6,7 @@ Mobile application that allows users to study collections of flashcards. The app
 
 ## Instructions:
 
-2- download expo app on your mobile device 3- expo start (if you don't have expo installed on your computer type npm install expo-cli --global) 4- scan the QR code from your mobile in the expo app.
-
-### `npm install`
-
-Installs all equired dependencies.
+## `npm install`
 
 ### download expo app on your mobile device
 
