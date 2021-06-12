@@ -5,12 +5,12 @@ import { blue, gray, white } from "../utils/colors";
 export default function TextButton({ children, onPress, style = {} }) {
   return (
     <TouchableOpacity onPress={onPress}>
-      <Text style={[styles.reset, style]}> {children}</Text>
+      <Text style={[styles.button, style]}> {children}</Text>
     </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({
-  reset: {
+  button: {
     color: blue,
     backgroundColor: white,
     padding: 10,

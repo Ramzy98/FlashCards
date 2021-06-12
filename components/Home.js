@@ -1,50 +1,84 @@
 import React, { Component } from "react";
 import {
+  View,
   ScrollView,
   TouchableOpacity,
   Text,
   StyleSheet,
   Platform,
 } from "react-native";
-import { generateID } from "../utils/helpers";
-import { white } from "../utils/colors";
+import { white, blue, gray } from "../utils/colors";
 import { getDecks } from "../utils/helpers";
 import DisplayCard from "./DisplayCard";
-import { gray } from "../utils/colors";
 import Constants from "expo-constants";
-import Deck from "./Deck";
+import { Ionicons, refresh } from "@expo/vector-icons";
+import { AsyncStorage } from "react-native";
 
 export default class Home extends Component {
   state = {
     decks: {},
   };
-  componentDidMount() {
+
+  async componentDidMount() {
     this.setState({
-      decks: getDecks(),
+      decks: await getDecks(),
     });
+    console.log("FROM HOMMEEEEEEEEEEEEEEEEEEEEEEEEE", this.state.decks);
   }
+  refresh = async () => {
+    var refreshedData = await getDecks();
+    this.setState(() => {
+      return {
+        decks: refreshedData,
+      };
+    });
+    console.log("refreshed", this.state.decks);
+  };
   render() {
     return (
       <ScrollView style={styles.container}>
-        <Text style={styles.title}>FlashCards</Text>
-        {Object.keys(this.state.decks).map((key) => {
-          return (
-            <TouchableOpacity
-              key={key}
-              onPress={() =>
-                this.props.navigation.navigate("Deck", { id: key })
-              }
+        <Text style={styles.title}>FlashCards </Text>
+        <TouchableOpacity>
+          <Text style={{ textAlign: "center" }}>
+            Added a new Deck?
+            <Text
+              style={{ alignItems: "center", fontSize: 15, color: blue }}
+              onPress={this.refresh}
             >
-              <DisplayCard info={this.state.decks[key]} />
-            </TouchableOpacity>
-          );
-        })}
+              Refresh
+            </Text>
+          </Text>
+        </TouchableOpacity>
+        {this.state.decks !== undefined && this.state.decks !== null ? (
+          Object.keys(this.state.decks).map((key) => {
+            return (
+              <TouchableOpacity
+                key={key}
+                onPress={() =>
+                  this.props.navigation.navigate("Deck", { id: key })
+                }
+              >
+                <DisplayCard info={this.state.decks[key]} />
+              </TouchableOpacity>
+            );
+          })
+        ) : (
+          <View
+            style={{
+              alignItems: "center",
+            }}
+          >
+            <Ionicons name={"add-circle-outline"} size={100}></Ionicons>
+            <Text>You don't have any decks yet!</Text>
+          </View>
+        )}
       </ScrollView>
     );
   }
 }
 const styles = StyleSheet.create({
   title: {
+    fontSize: 20,
     flexDirection: "row",
     borderRadius: Platform.OS === "ios" ? 16 : 2,
     backgroundColor: gray,

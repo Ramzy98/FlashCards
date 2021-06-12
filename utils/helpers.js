@@ -1,62 +1,46 @@
-const Decks = {
-  1: {
-    title: "React",
-    questions: [
-      {
-        question: "What is React?",
-        answer: "A library for managing user interfaces",
-      },
-      {
-        question: "Where do you make Ajax requests in React?",
-        answer: "The componentDidMount lifecycle event",
-      },
-    ],
-  },
-  2: {
-    title: "JavaScript",
-    questions: [
-      {
-        question: "What is a closure?",
-        answer:
-          "The combination of a function and the lexical environment within which that function was declared.",
-      },
-    ],
-  },
-  3: {
-    title: "vision",
-    questions: [
-      {
-        question: "What is a closure?",
-        answer:
-          "The combination of a function and the lexical environment within which that function was declared.",
-      },
-    ],
-  },
-  4: {
-    title: "ai",
-    questions: [
-      {
-        question: "What is a closure?",
-        answer:
-          "The combination of a function and the lexical environment within which that function was declared.",
-      },
-    ],
-  },
-  5: {
-    title: "web",
-    questions: [],
-  },
-};
+import { AsyncStorage } from "react-native";
+export const FLASHCARDS_STORAGE_KEY = "FlashCards:data";
+
+var decks;
 export function generateID() {
   return Date.now();
 }
 
-export function getDecks() {
-  return Decks;
+export async function getDecks() {
+  return await AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY).then((Data) => {
+    decks = JSON.parse(Data);
+    return JSON.parse(Data);
+  });
 }
 
 export function getDeck(id) {
-  return Decks[id];
+  return decks[id];
+}
+
+export function saveDeckTitle(title) {
+  var key = generateID();
+  return AsyncStorage.mergeItem(
+    FLASHCARDS_STORAGE_KEY,
+    JSON.stringify({
+      [key]: {
+        title: title,
+        questions: [],
+      },
+    })
+  );
+}
+export function addCardToDeck(id, question, answer) {
+  AsyncStorage.clear();
+  decks[id].questions.push({
+    question: question,
+    answer: answer,
+  });
+  var newEntry = decks[id].questions;
+  decks[id] = {
+    ...decks[id],
+    questions: newEntry,
+  };
+  AsyncStorage.setItem(FLASHCARDS_STORAGE_KEY, JSON.stringify(decks));
 }
 /*
 getDecks: return all of the decks along with their titles, questions, and answers.

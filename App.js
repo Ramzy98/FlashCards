@@ -1,13 +1,13 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 import Home from "./components/Home";
 import Deck from "./components/Deck";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, add } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import AddNewDeck from "./components/AddNewDeck";
+import AddCard from "./components/AddCard";
+import StartQuiz from "./components/StartQuiz";
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 function HomeStackScreen() {
@@ -15,6 +15,8 @@ function HomeStackScreen() {
     <HomeStack.Navigator>
       <HomeStack.Screen name="Home" component={Home} />
       <HomeStack.Screen name="Deck" component={Deck} />
+      <HomeStack.Screen name="AddCard" component={AddCard} />
+      <HomeStack.Screen name="StartQuiz" component={StartQuiz} />
     </HomeStack.Navigator>
   );
 }
@@ -27,9 +29,9 @@ export default function App() {
             let iconName;
 
             if (route.name === "Home") {
-              iconName = focused
-                ? "ios-information-circle"
-                : "ios-information-circle-outline";
+              iconName = focused ? "home" : "home-outline";
+            } else if (route.name === "Add New Deck") {
+              iconName = "add";
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -41,14 +43,8 @@ export default function App() {
         }}
       >
         <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Add New Deck" component={AddNewDeck} />
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});

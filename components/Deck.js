@@ -3,7 +3,8 @@ import { Text, View, StyleSheet } from "react-native";
 import { getDeck } from "../utils/helpers";
 import TextButton from "./TextButton";
 import { white, gray } from "../utils/colors";
-
+import AddCard from "./AddCard";
+import StartQuiz from "./StartQuiz";
 export default class Deck extends Component {
   state = { info: { title: "", questions: [] } };
   componentDidMount() {
@@ -14,8 +15,24 @@ export default class Deck extends Component {
       <View style={styles.container}>
         <Text style={styles.title}>{this.state.info.title}</Text>
         <Text>{Object.keys(this.state.info.questions).length} Cards</Text>
-        <TextButton onPress={this.reset}>Add Card</TextButton>
-        <TextButton onPress={this.reset}>Start Quiz</TextButton>
+        <TextButton
+          onPress={() => {
+            this.props.navigation.navigate("AddCard", {
+              id: this.props.route.params.id,
+            });
+          }}
+        >
+          Add Card
+        </TextButton>
+        <TextButton
+          onPress={() => {
+            this.props.navigation.navigate("StartQuiz", {
+              id: this.props.route.params.id,
+            });
+          }}
+        >
+          Start Quiz
+        </TextButton>
       </View>
     );
   }
