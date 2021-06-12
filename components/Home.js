@@ -23,7 +23,6 @@ export default class Home extends Component {
     this.setState({
       decks: await getDecks(),
     });
-    console.log("FROM HOMMEEEEEEEEEEEEEEEEEEEEEEEEE", this.state.decks);
   }
   refresh = async () => {
     var refreshedData = await getDecks();
@@ -32,7 +31,6 @@ export default class Home extends Component {
         decks: refreshedData,
       };
     });
-    console.log("refreshed", this.state.decks);
   };
   render() {
     return (

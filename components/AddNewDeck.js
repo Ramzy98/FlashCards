@@ -36,7 +36,6 @@ export default class AddNewDeck extends Component {
           style={styles.input}
           placeholder="Deck Title"
         />
-        <Text>{JSON.stringify(this.state)}</Text>
         <TextButton onPress={this.addNewDeck}>Submit</TextButton>
       </View>
     );

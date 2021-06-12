@@ -27,6 +27,7 @@ export default class AddCard extends Component {
       this.state.question,
       this.state.answer
     );
+    this.props.navigation.navigate("Deck", { id: this.props.route.params.id });
   };
   render() {
     return (
@@ -41,7 +42,6 @@ export default class AddCard extends Component {
           style={styles.input}
           placeholder="Answer"
         />
-        <Text>{JSON.stringify(this.state)}</Text>
         <TextButton onPress={this.handleSubmit}>Submit</TextButton>
       </View>
     );
